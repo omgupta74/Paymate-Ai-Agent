@@ -571,6 +571,7 @@ SYSTEM_PROMPT = (
 st.set_page_config(page_title="PayMate — AI Fintech Agent", page_icon="💸", layout="wide")
 
 st.markdown("""
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
@@ -675,7 +676,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.markdown("""
-<p class="rzp-hero-title">💸 PayMate — AI Fintech Assistant</p>
+<p class="rzp-hero-title"><i class="fa-solid fa-wallet" style="color:#3395FF; margin-right:14px;"></i>PayMate — AI Fintech Assistant</p>
 <p class="rzp-hero-sub">Built with Groq (open-source LLM) · Tool-calling AI agent ·
 Real Razorpay Payment Links (Test Mode) · Persistent expense tracking</p>
 """, unsafe_allow_html=True)
@@ -712,23 +713,23 @@ total_pending = total_invoiced - total_paid
 
 # ---------- Top dashboard metrics ----------
 m1, m2, m3, m4 = st.columns(4)
-m1.metric("💰 Total Invoiced", f"Rs.{total_invoiced:,.0f}")
-m2.metric("✅ Collected", f"Rs.{total_paid:,.0f}")
-m3.metric("⏳ Pending", f"Rs.{total_pending:,.0f}")
-m4.metric("🧾 Expenses", f"Rs.{total_spent:,.0f}")
+m1.metric("Total Invoiced", f"Rs.{total_invoiced:,.0f}")
+m2.metric("Collected", f"Rs.{total_paid:,.0f}")
+m3.metric("Pending", f"Rs.{total_pending:,.0f}")
+m4.metric("Expenses", f"Rs.{total_spent:,.0f}")
 
 st.write("")
 
 # ---------- Quick action buttons ----------
 st.markdown("**Quick Actions**")
 qa1, qa2, qa3, qa4 = st.columns(4)
-if qa1.button("💳  New Payment Link", use_container_width=True):
+if qa1.button("New Payment Link", use_container_width=True):
     st.session_state.pending_prompt = "Create a payment link for "
-if qa2.button("📄  New Invoice", use_container_width=True):
+if qa2.button("New Invoice", use_container_width=True):
     st.session_state.pending_prompt = "Generate an invoice for "
-if qa3.button("✅  Check Payments", use_container_width=True):
+if qa3.button("Check Payments", use_container_width=True):
     st.session_state.pending_prompt = "Who has paid?"
-if qa4.button("📊  Show Expenses", use_container_width=True):
+if qa4.button("Show Expenses", use_container_width=True):
     st.session_state.pending_prompt = "Show my expenses"
 
 st.write("")
@@ -736,13 +737,19 @@ st.divider()
 
 # Sidebar
 with st.sidebar:
-    st.markdown("### 💸 PayMate")
-    if st.button("🔄 Start New Conversation", use_container_width=True):
+    st.markdown(
+        '<h3><i class="fa-solid fa-wallet" style="color:#3395FF; margin-right:8px;"></i>PayMate</h3>',
+        unsafe_allow_html=True,
+    )
+    if st.button("Start New Conversation", use_container_width=True):
         st.session_state.messages = [{"role": "system", "content": SYSTEM_PROMPT}]
         st.rerun()
 
     st.divider()
-    st.markdown("#### 📄 Recent Invoices")
+    st.markdown(
+        '<h4><i class="fa-solid fa-file-invoice" style="margin-right:8px;"></i>Recent Invoices</h4>',
+        unsafe_allow_html=True,
+    )
     if inv_rows:
         for inv_client, inv_total, inv_status, inv_url in inv_rows[:8]:
             badge_class = "badge-paid" if inv_status == "paid" else "badge-pending"
@@ -756,7 +763,10 @@ with st.sidebar:
         st.caption("No invoices yet.")
 
     st.divider()
-    st.markdown("#### 🧾 Recent Expenses")
+    st.markdown(
+        '<h4><i class="fa-solid fa-receipt" style="margin-right:8px;"></i>Recent Expenses</h4>',
+        unsafe_allow_html=True,
+    )
     if exp_rows:
         for desc, amt, cat in exp_rows[:8]:
             st.write(f"**{desc}** — Rs.{amt:.2f}  \n_{cat}_")
@@ -764,7 +774,10 @@ with st.sidebar:
         st.caption("Try: 'Add expense: Swiggy order 450'")
 
     st.divider()
-    st.markdown("#### 💳 Integrations")
+    st.markdown(
+        '<h4><i class="fa-solid fa-plug" style="margin-right:8px;"></i>Integrations</h4>',
+        unsafe_allow_html=True,
+    )
     if os.environ.get("RAZORPAY_KEY_ID") and os.environ.get("RAZORPAY_KEY_SECRET"):
         st.success("Razorpay Test Mode ✓")
     else:
